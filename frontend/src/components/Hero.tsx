@@ -1,77 +1,60 @@
-/**
- * Hero section: first thing users see. Clear value prop and visual anchor.
- * Uses existing WCAG-friendly palette and typography.
- */
+import { motion } from 'framer-motion';
+import { Mic, Zap, Terminal, ArrowDown } from 'lucide-react';
+
 export function Hero() {
   return (
-    <section
-      className="relative rounded-2xl overflow-hidden border border-slate-600 bg-surfaceLight"
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="relative rounded-3xl overflow-hidden border border-white/10 bg-surfaceLight/50 backdrop-blur-md"
       aria-labelledby="hero-heading"
     >
-      {/* Subtle gradient band for visual interest */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background:
-            'linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, transparent 50%, rgba(34, 197, 94, 0.08) 100%)',
-        }}
-        aria-hidden
-      />
-      <div className="relative p-6 md:p-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-3">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-teal/10 pointer-events-none" />
+
+      <div className="relative p-8 md:p-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+          <div className="space-y-4 max-w-2xl">
             <h2
               id="hero-heading"
-              className="text-accessibility-xl md:text-2xl font-bold text-textPrimary tracking-tight"
+              className="text-3xl font-bold text-textPrimary tracking-tight"
             >
-              Say it. We do it.
+              Interactive Demo
             </h2>
-            <p className="text-accessibility-lg text-textMuted max-w-xl">
-              Use the <strong className="text-textPrimary">Record</strong> button below to give a voice command.
-              We transcribe it, detect your intent, and run the automation—no mouse or keyboard needed.
+            <p className="text-lg text-textMuted leading-relaxed">
+              Experience the power of voice automation. Click the <strong className="text-accentBright">Record</strong> button below, state your command, and watch the system transcribe, interpret, and execute it in real-time.
             </p>
           </div>
-          <div
-            className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center"
-            aria-hidden
-          >
-            <svg
-              className="w-8 h-8 md:w-10 md:h-10 text-accent"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0V8m0 0V4m0 0h4m-4 0H8"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 14v4"
-              />
-            </svg>
+          
+          <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-surface to-surfaceLight border border-white/10 shadow-inner">
+            <Terminal className="w-10 h-10 text-accent" />
           </div>
         </div>
-        <ul className="mt-6 flex flex-wrap gap-4 text-sm text-textMuted" role="list">
-          <li className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-success" aria-hidden />
-            Voice → transcript
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-accent" aria-hidden />
-            Intent extraction
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-warning" aria-hidden />
-            n8n + Playwright
-          </li>
-        </ul>
+
+        <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-6 text-sm font-medium text-textMuted">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center">
+              <Mic className="w-4 h-4 text-success" />
+            </div>
+            <span>Voice Input</span>
+          </div>
+          <ArrowDown className="w-4 h-4 text-textMuted/30 rotate-[-90deg] md:rotate-0" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
+              <Zap className="w-4 h-4 text-accent" />
+            </div>
+            <span>Intent Extraction</span>
+          </div>
+          <ArrowDown className="w-4 h-4 text-textMuted/30 rotate-[-90deg] md:rotate-0" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center">
+              <Terminal className="w-4 h-4 text-warning" />
+            </div>
+            <span>Automation Execution</span>
+          </div>
+        </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

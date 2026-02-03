@@ -1,6 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mic, Square, RotateCcw, Sparkles } from 'lucide-react';
+import clsx from 'clsx';
 import type { TranscriptEntry } from '../types';
-import React from 'react';
+
 interface VoiceRecorderProps {
   onRecorded: (blob: Blob) => void;
   /** When set, this transcript is added to the replay list (e.g. after API returns). */
@@ -17,7 +20,7 @@ export function VoiceRecorder({ onRecorded, lastTranscript, onTranscriptConsumed
   const chunksRef = useRef<Blob[]>([]);
 
   // Add API-returned transcript to replay list
-  React.useEffect(() => {
+  useEffect(() => {
     if (lastTranscript?.trim()) {
       setReplayList((prev) => [
         ...prev,
@@ -47,7 +50,7 @@ export function VoiceRecorder({ onRecorded, lastTranscript, onTranscriptConsumed
     } catch (err) {
       setLiveTranscript('Microphone access denied. Please allow microphone and try again.');
     }
-  }, [onRecorded, liveTranscript]);
+  }, [onRecorded]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
@@ -60,63 +63,120 @@ export function VoiceRecorder({ onRecorded, lastTranscript, onTranscriptConsumed
 
   const replay = useCallback((entry: TranscriptEntry) => {
     setLiveTranscript(entry.text);
+    // In a real app, you might also trigger the action again here
   }, []);
 
   return (
     <section
-      className="rounded-2xl bg-surfaceLight p-6 border border-slate-600"
+      className="relative rounded-3xl bg-surfaceLight/50 backdrop-blur-md p-8 border border-white/10 shadow-2xl overflow-hidden group"
       aria-labelledby="voice-heading"
     >
-      <h2 id="voice-heading" className="text-accessibility-xl font-semibold text-textPrimary mb-4">
-        Voice control
-      </h2>
-      <div className="flex flex-wrap items-center gap-4">
-        {!isRecording ? (
-          <button
-            type="button"
-            onClick={startRecording}
-            disabled={disabled}
-            className="min-h-[56px] min-w-[56px] rounded-full bg-accent hover:bg-accent-dark text-white font-semibold text-accessibility-lg px-6 py-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50"
-            aria-label="Start recording voice command"
-          >
-            Record
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={stopRecording}
-            className="min-h-[56px] min-w-[56px] rounded-full bg-error hover:bg-red-600 text-white font-semibold text-accessibility-lg px-6 py-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-error focus-visible:ring-offset-2"
-            aria-label="Stop recording"
-          >
-            Stop
-          </button>
-        )}
+      {/* Dynamic Background Glow */}
+      <div className={clsx(
+        "absolute inset-0 transition-opacity duration-700 pointer-events-none",
+        isRecording ? "opacity-100" : "opacity-0"
+      )}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[100px] animate-pulse" />
       </div>
-      {liveTranscript && (
-        <div className="mt-4 p-4 rounded-xl bg-surface border border-slate-600">
-          <p className="text-accessibility-lg text-textPrimary" role="status" aria-live="polite">
-            {liveTranscript}
-          </p>
+
+      <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-8">
+        <h2 id="voice-heading" className="text-3xl font-bold text-white tracking-tight flex items-center gap-2">
+          <Sparkles className="w-6 h-6 text-accent" />
+          Voice Control
+        </h2>
+
+        <div className="relative">
+          {/* Ripple Effect Rings */}
+          <AnimatePresence>
+            {isRecording && (
+              <>
+                {[1, 2, 3].map((i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 1, opacity: 0.5 }}
+                    animate={{ scale: 2.5, opacity: 0 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: i * 0.4,
+                      ease: "easeOut"
+                    }}
+                    className="absolute inset-0 rounded-full bg-accent/30 z-0"
+                  />
+                ))}
+              </>
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={isRecording ? stopRecording : startRecording}
+            disabled={disabled}
+            className={clsx(
+              "relative z-10 w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg border-4",
+              isRecording 
+                ? "bg-error border-error/30 shadow-error/50" 
+                : "bg-accent border-accent/30 shadow-accent/50 hover:bg-accentBright",
+              disabled && "opacity-50 cursor-not-allowed grayscale"
+            )}
+            aria-label={isRecording ? "Stop recording" : "Start recording voice command"}
+          >
+            {isRecording ? (
+              <Square className="w-10 h-10 text-white fill-current" />
+            ) : (
+              <Mic className="w-10 h-10 text-white" />
+            )}
+          </motion.button>
         </div>
-      )}
-      {replayList.length > 0 && (
-        <div className="mt-4">
-          <h3 className="text-lg font-medium text-textMuted mb-2">Recent (replay)</h3>
-          <ul className="space-y-2">
-            {replayList.slice(-5).reverse().map((entry) => (
-              <li key={entry.id}>
-                <button
-                  type="button"
-                  onClick={() => replay(entry)}
-                  className="text-left w-full p-3 rounded-lg bg-surface hover:bg-surfaceLight text-textPrimary text-accessibility-lg border border-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  {entry.text}
-                </button>
-              </li>
-            ))}
-          </ul>
+
+        <div className="space-y-4 w-full max-w-lg">
+          <AnimatePresence mode="wait">
+            {liveTranscript ? (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="p-6 rounded-2xl bg-surface/80 border border-white/10 backdrop-blur-sm"
+              >
+                <p className="text-lg text-textPrimary font-medium animate-pulse">
+                  {liveTranscript}
+                </p>
+              </motion.div>
+            ) : (
+              <motion.p 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="text-textMuted text-lg"
+              >
+                Tap the microphone to start speaking
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          {replayList.length > 0 && (
+            <div className="pt-6 border-t border-white/10 w-full">
+              <h3 className="text-sm font-semibold text-textMuted uppercase tracking-wider mb-3">Recent Commands</h3>
+              <div className="flex flex-wrap justify-center gap-2">
+                {replayList.slice(-3).map((item) => (
+                  <motion.button
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => replay(item)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-surfaceLight border border-slate-700 text-sm text-textMuted hover:text-white hover:border-slate-500 transition-colors"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span className="truncate max-w-[150px]">{item.text}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </section>
   );
 }

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 // Page of features page -2
 export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
   const features = [
@@ -45,15 +46,29 @@ export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
       <div className="grid lg:grid-cols-[1fr,380px] gap-10 lg:gap-12 items-start">
         {/* Left: title + feature cards */}
         <div>
-          <h2 id="features-heading" className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
+          <motion.h2
+            id="features-heading"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl md:text-4xl font-bold tracking-tight mb-8"
+          >
             <span className="text-textPrimary">Bridging the </span>
             <span className="text-accentBright">Digital Divide</span>
             <span className="text-textPrimary"> with </span>
             <span className="text-success">Voice Automation</span>
-          </h2>
+          </motion.h2>
           <ul className="space-y-6">
             {features.map((f, i) => (
-              <li key={i} className="flex gap-4">
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="flex gap-4"
+              >
                 <div
                   className={`flex-shrink-0 w-12 h-12 rounded-full border flex items-center justify-center ${f.iconBg}`}
                   aria-hidden
@@ -64,12 +79,16 @@ export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
                   <h3 className="text-xl font-bold text-textPrimary mb-1">{f.title}</h3>
                   <p className="text-textMuted text-accessibility-lg">{f.description}</p>
                 </div>
-              </li>
+              </motion.li>
             ))}
           </ul>
         </div>
         {/* Right: CTA card */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
           className="rounded-2xl border-2 p-6 md:p-8 bg-surfaceCard border-teal-light/40 shadow-lg"
           style={{ boxShadow: '0 0 24px rgba(94, 234, 212, 0.12)' }}
         >
@@ -78,7 +97,9 @@ export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
             Experience the future of accessible web interaction today.
           </p>
           <div className="flex flex-col gap-3">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="button"
               onClick={onTryDemo}
               className="flex items-center justify-center gap-2 w-full min-h-[48px] px-6 py-3 rounded-xl bg-accentBright hover:bg-accent-dark text-white font-semibold text-accessibility-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-accent focus-visible:ring-offset-2"
@@ -89,7 +110,7 @@ export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14v4" />
               </svg>
               Try the Live Demo
-            </button>
+            </motion.button>
             <a
               href="https://github.com/Hardikwb/VoiceAutomation"
               target="_blank"
@@ -111,7 +132,7 @@ export function FeaturesSection({ onTryDemo }: { onTryDemo: () => void }) {
               </span>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

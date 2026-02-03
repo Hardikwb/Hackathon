@@ -43,23 +43,12 @@ body::before {
   animation: bg-glow 8s ease-in-out infinite;
 }
 
-/* HowItWorks card shimmer (subtle hover) */
-.howitworks-card {
-  position: relative;
-  overflow: hidden;
+/* Animation delay helpers for blob effects */
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
-.howitworks-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%);
-  transform: translateX(-100%);
-  transition: transform 0.5s ease;
-}
-.group:hover .howitworks-card::after,
-.group:focus-within .howitworks-card::after {
-  transform: translateX(100%);
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
 /* Visible focus for keyboard users (WCAG 2.4.7) */
@@ -83,4 +72,23 @@ body::before {
 
 .skip-link:focus {
   top: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+  body::before {
+    animation: none !important;
+  }
+  .animate-blob,
+  .animate-shimmer,
+  .animate-glow-pulse,
+  .animate-float-y,
+  .animate-float-y-lg {
+    animation: none !important;
+  }
 }

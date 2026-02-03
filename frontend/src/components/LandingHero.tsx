@@ -1,54 +1,113 @@
-/**
- * Landing hero: title with accent line, subtitle box, and tech stack icons.
- * Matches design: Voice-Activated / Browser Automation / for Accessibility.
- */
+import { motion } from 'framer-motion';
+import { Mic, BrainCircuit, Workflow, ArrowRight } from 'lucide-react';
+
 export function LandingHero() {
+  const scrollToDemo = () => {
+    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative text-center py-12 md:py-16" aria-labelledby="landing-heading">
-      {/* Accent line above title */}
-      <div className="w-16 h-1 rounded-full bg-success mx-auto mb-6" aria-hidden />
-      <h1
-        id="landing-heading"
-        className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight max-w-4xl mx-auto"
-      >
-        <span className="text-textPrimary block">Voice-Activated</span>
-        <span className="text-accentBright block">Browser Automation</span>
-        <span className="text-textPrimary block">for Accessibility</span>
-      </h1>
-      <p
-        className="mt-6 max-w-2xl mx-auto px-4 py-3 rounded-xl bg-teal-light/10 border border-teal-light/30 text-textPrimary text-lg md:text-xl"
-        style={{ backgroundColor: 'rgba(94, 234, 212, 0.08)' }}
-      >
-        Empowering elderly and motor-impaired users with hands-free web control.
-      </p>
-      {/* Tech stack icons */}
-      <div className="mt-10 flex flex-wrap justify-center gap-8 md:gap-12" role="list" aria-label="Technologies">
-        <div className="flex flex-col items-center gap-2" role="listitem">
-          <div className="w-12 h-12 rounded-xl bg-teal-light/20 border border-teal-light/40 flex items-center justify-center text-teal-light">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0V8m0 0V4m0 0h4m-4 0H8" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14v4" />
-            </svg>
-          </div>
-          <span className="text-textPrimary font-medium text-sm uppercase tracking-wider">Wispr Flow</span>
-        </div>
-        <div className="flex flex-col items-center gap-2" role="listitem">
-          <div className="w-12 h-12 rounded-xl bg-teal-light/20 border border-teal-light/40 flex items-center justify-center text-teal-light">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-          </div>
-          <span className="text-textPrimary font-medium text-sm uppercase tracking-wider">Gemini AI</span>
-        </div>
-        <div className="flex flex-col items-center gap-2" role="listitem">
-          <div className="w-12 h-12 rounded-xl bg-teal-light/20 border border-teal-light/40 flex items-center justify-center text-teal-light">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <span className="text-textPrimary font-medium text-sm uppercase tracking-wider">n8n + Playwright</span>
-        </div>
+    <section className="relative min-h-[80vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple/20 rounded-full blur-3xl animate-blob mix-blend-screen" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-blob animation-delay-2000 mix-blend-screen" />
+        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-teal/20 rounded-full blur-3xl animate-blob animation-delay-4000 mix-blend-screen" />
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 space-y-8 max-w-5xl mx-auto"
+      >
+        {/* Badge */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surfaceLight/50 border border-white/10 backdrop-blur-sm"
+        >
+          <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+          <span className="text-sm font-medium text-textMuted">Hackathon 2026 Ready</span>
+        </motion.div>
+
+        {/* Main Title */}
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
+          <span className="block text-textPrimary">Voice-Activated</span>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-accentBright via-teal-light to-purple animate-shimmer bg-[length:200%_auto]">
+            Browser Automation
+          </span>
+          <span className="block text-textPrimary">for Accessibility</span>
+        </h1>
+
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="max-w-2xl mx-auto text-lg md:text-xl text-textMuted leading-relaxed"
+        >
+          Empowering elderly and motor-impaired users with hands-free web control.
+          Powered by state-of-the-art AI to translate your voice into action.
+        </motion.p>
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <button
+            onClick={scrollToDemo}
+            className="group relative inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-dark text-white rounded-full font-semibold text-lg transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:-translate-y-1"
+          >
+            Try the Demo
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+          </button>
+        </motion.div>
+
+        {/* Overview Flow: 3 nodes with animated arrows */}
+        {/* Removed overview flow between CTA and Features per request */}
+
+        {/* Tech Stack */}
+        <div className="pt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <TechItem 
+            icon={<Mic className="w-6 h-6" />} 
+            title="Wispr Flow" 
+            delay={0.8} 
+            color="bg-teal-light/20 text-teal-light"
+          />
+          <TechItem 
+            icon={<BrainCircuit className="w-6 h-6" />} 
+            title="Gemini AI" 
+            delay={0.9}
+            color="bg-purple/20 text-purple"
+          />
+          <TechItem 
+            icon={<Workflow className="w-6 h-6" />} 
+            title="n8n + Playwright" 
+            delay={1.0}
+            color="bg-accent/20 text-accentBright"
+          />
+        </div>
+      </motion.div>
     </section>
+  );
+}
+
+// Flow components removed
+function TechItem({ icon, title, delay, color }: { icon: React.ReactNode, title: string, delay: number, color: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="flex flex-col items-center gap-3"
+    >
+      <div className={`w-14 h-14 rounded-2xl ${color} flex items-center justify-center border border-white/5`}>
+        {icon}
+      </div>
+      <span className="font-medium text-textMuted">{title}</span>
+    </motion.div>
   );
 }
